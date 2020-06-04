@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "aws-sdk": "^2.688.0",
+    "jest": "^26.0.1"
+  }
+}

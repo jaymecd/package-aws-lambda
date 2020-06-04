@@ -14,21 +14,7 @@ help:
 	@ echo
 .PHONY: help
 
-## Clean up garbage
-clean:
-	# $@ ...
-	find . -type d -name .pytest_cache -print0 | xargs -r -0 rm -rf
-	find . -type f -name '*.pyc' -print0 | xargs -r -0 rm -rf
-	find . -type d -name '__pycache__' -print0 | xargs -r -0 rm -rf
-	# $@: done
-.PHONY: clean
-
-## Run initial unit tests
-test-initial:
-	make test -C code_initial
-.PHONY: test-initial
-
-## Run final unit tests
-test-final:
-	make test -C code_final
-.PHONY: test-final
+## Run unittests
+test:
+	python3 -m pytest -v test
+.PHONY: test

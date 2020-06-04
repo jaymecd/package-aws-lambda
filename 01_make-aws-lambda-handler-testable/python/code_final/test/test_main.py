@@ -15,7 +15,7 @@ def test__handler__success(bootstrap):
 
     from src.main import handler
 
-    assert handler == bootstrap.return_value, "handler mismatch"
+    assert handler == bootstrap.return_value
 
     bootstrap.assert_called_once_with(cost_center="a1b2c3")
 
@@ -33,6 +33,6 @@ def test__handler__missing_envvar(bootstrap):
 
     from src.main import handler
 
-    assert handler == bootstrap.return_value, "handler mismatch"
+    assert handler == bootstrap.return_value
 
     bootstrap.assert_called_once_with(cost_center=None)

@@ -17,6 +17,8 @@ def handler_factory(
     lambda_client = session.client("lambda")
 
     def handler(event: dict, context: object) -> dict:
+        assert "arn" in event, "expecting 'arn' key"
+
         lambda_client.tag_resource(
             Resource=event["arn"], Tags={"CostCenter": cost_center},
         )

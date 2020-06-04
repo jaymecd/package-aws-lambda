@@ -14,20 +14,7 @@ help:
 	@ echo
 .PHONY: help
 
-## Clean up garbage
-clean:
-	# $@ ...
-	find . -type f -name '*.pyc' -print0 | xargs -r -0 rm -rf
-	find . -type d -name '__pycache__' -print0 | xargs -r -0 rm -rf
-	# $@: done
-.PHONY: clean
-
-HAS_PYTEST := $(shell pytest -V &>/dev/null && echo 1)
-
 ## Run unittests
 test:
-ifneq ($(HAS_PYTEST),1)
-	$(error pytest command was not found)
-endif
-	pytest -v test
+	python3 -m pytest -v test
 .PHONY: test

@@ -1,21 +1,44 @@
-# Make AWS Lambda handler testable: Python edition
+# Make AWS Lambda handler testable: Python
 
-Initial code mentioned in the article could be found in [initial_code](initial_code) directory.
+Source code & unit tests:
+
+- [final version](code_final)
+- [initial version](code_initial)
+
 
 ## Prerequisites
 
-- `pytest` to run unit tests. Install with `pipx`, `pip3`, `pipenv` or whatever package manager you like most.
+Required dependencies:
+
+- `pytest` to run unit tests
+- `boto3` to communicate with AWS API
+
+Install dependencies locally, if needed:
+
+```shell
+$ pip3 install --user -r requirements.txt
+```
+
 
 ## Usage
 
-Run test on final code:
+Run tests on final code:
 
 ```shell
-$ make test
+$ make test-final
 ```
 
-Run test on initial code:
+Run tests on initial code:
 
 ```shell
-$ make test -C initial_code/
+$ make test-initial
+```
+
+
+## Clean up
+
+Keep local repository clean:
+
+```shell
+$ make clean
 ```

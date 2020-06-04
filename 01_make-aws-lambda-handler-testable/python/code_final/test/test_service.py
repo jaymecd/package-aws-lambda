@@ -13,7 +13,7 @@ def test__bootstrap__success(Session, handler_factory):
 
     handler = services.bootstrap(cost_center="a1b2c3")
 
-    assert handler == handler_factory.return_value, "handler mismatch"
+    assert handler == handler_factory.return_value
 
     handler_factory.assert_called_once_with(session, "a1b2c3")
     Session.assert_called_once()
@@ -28,7 +28,7 @@ def test__bootstrap__error(Session, handler_factory):
     with pytest.raises(RuntimeError) as excinfo:
         services.bootstrap(cost_center="a1b2c3")
 
-    assert "error happened" == str(excinfo.value), "expected error"
+    assert "error happened" == str(excinfo.value)
 
     handler_factory.assert_called_once_with(session, "a1b2c3")
     Session.assert_called_once()
@@ -45,14 +45,14 @@ def test__handler_factory__success(Session):
 
     handler = services.handler_factory(session, "a1b2c3")
 
-    assert callable(handler), "expecting callable handler"
+    assert callable(handler)
 
     event = {"arn": "arn:aws:lambda:eu-west-1:222222222:function:tag-me"}
     context = object()
 
     result = handler(event, context)
 
-    assert lambda_client.list_tags.return_value["Tags"] == result, "response mismatch"
+    assert lambda_client.list_tags.return_value["Tags"] == result
 
     session.client.assert_called_once_with("lambda")
 
@@ -68,4 +68,26 @@ def test__handler_factory__empty_param(Session):
     with pytest.raises(AssertionError) as excinfo:
         services.handler_factory(session, "")
 
-    assert "expecting cost center ID" == str(excinfo.value), "expected error"
+    assert "expecting cost center ID" == str(excinfo.value)
+
+
+@mock.patch("src.services.boto3.Session", autospec=True)
+def test__handler_factory__invalid_payload(Session):
+    session = Session.return_value
+
+    lambda_client = session.client.return_value
+
+    handler = services.handler_factory(session, "a1b2c3")
+
+    assert callable(handler)
+
+    event = {"invalid": "payload"}
+    context = object()
+
+    with pytest.raises(AssertionError) as excinfo:
+        handler(event, context)
+
+    assert "expecting 'arn' key" == str(excinfo.value)
+
+    lambda_client.tag_resource.assert_not_called()
+    lambda_client.list_tags.assert_not_called()
